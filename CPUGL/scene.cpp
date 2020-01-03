@@ -23,15 +23,19 @@ void Scene::rend() {
 	}
 
 	//Fragment Shader
+	double ambient = 0.2;
+	double diffuse = 0.6;
+	double specular = 0.2;
+	double phone_s = 1;
 	std::vector<Color> colors;
 	for (int i = 0; i < rays.size(); i++) {
 		Color c;
 		if (inters[i].ray_depth < 1e8) {
+			c = inters[i].col * ambient;
 			for (auto light : lights) {
-				Color light_c = light.shading(inters[i], rays[i]);
+				Color light_c = light.phone_shading(inters[i], rays[i], diffuse, specular, phone_s);
 				c = c + light_c;
 			}
-			c = Color(0, 0, 1);
 		}
 		colors.push_back(c);
 	}
@@ -41,7 +45,7 @@ void Scene::rend() {
 	int ind = 0;
 	for (int r = 0; r < height; r++) {
 		for (int c = 0; c < width; c++) {
-			debug_show.at<cv::Vec3b>(r, c)[2] = colors[ind].r*250;
+			debug_show.at<cv::Vec3b>(r, c)[2] = colors[ind].r * 250;
 			debug_show.at<cv::Vec3b>(r, c)[1] = colors[ind].g * 250;
 			debug_show.at<cv::Vec3b>(r, c)[0] = colors[ind].b * 250;
 			ind++;

@@ -15,9 +15,14 @@ int main()
 	scene.camera.tri.v2 = Vector(0, -2, 0);
 	SphereObject sphere;
 	sphere.o = Point(0, 0, 0);
-	sphere.r = 0.5;
+	sphere.r = 0.8;
 	sphere.col = Color(0, 0, 1);
 	scene.objects.push_back(&sphere);
+
+	Light light;
+	light.o = Point(0, 1, 1);
+	scene.lights.push_back(light);
+
 	scene.rend();
 	return 0;
 }

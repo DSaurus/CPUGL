@@ -85,6 +85,9 @@ struct Color {
 	Color operator +(Color B) {
 		return Color(r + B.r, g + B.g, b + B.b);
 	}
+	Color operator *(double t) {
+		return Color(r*t, g*t, b*t);
+	}
 };
 
 struct Intersection {
