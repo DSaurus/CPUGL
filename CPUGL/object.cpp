@@ -10,16 +10,20 @@ Intersection MeshObject::get_intersection(Line ray) {
 		p[1] = verts[tri[1]];
 		p[2] = verts[tri[2]];
 		Vector n = get_normal(p[0], p[1], p[2]);
-		double D = n * p[0];
+		double D = -1*n * p[0];
 		double ray_depth = -(D + n * ray.o) / (n*ray.v);
 		if (ray_depth < 0) continue;
 		if (ray_depth > res.ray_depth) continue;
-
 
 		Point inter = ray.o + ray.v*ray_depth;
 		double a, b;
 		get_interpolation(p[1] - p[0], p[2] - p[0], inter - p[0], a, b);
 		if (a < 0 || b < 0 || a+b > 1) continue;
+
+		/*std::cout << "#" << ray.o.str().c_str() << std::endl;
+		std::cout << "@" << (ray.v*ray_depth).str().c_str() << std::endl;
+		std::cout << a << " " << b << std::endl;
+		std::cout << inter.str().c_str() << std::endl;*/
 
 		res.ray_depth = ray_depth;
 		res.o = inter;
