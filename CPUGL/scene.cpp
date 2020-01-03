@@ -5,7 +5,7 @@
 #include "opencv2/opencv.hpp"
 
 void Scene::rend() {
-	int width = 200, height = 200;
+	int width = 500, height = 500;
 	std::vector<Line> rays;
 	camera.getRays(rays, width, height);
 
@@ -26,7 +26,7 @@ void Scene::rend() {
 	double ambient = 0.2;
 	double diffuse = 0.6;
 	double specular = 0.2;
-	double phone_s = 1;
+	double phone_s = 2;
 	std::vector<Color> colors;
 	for (int i = 0; i < rays.size(); i++) {
 		Color c;
@@ -45,9 +45,9 @@ void Scene::rend() {
 	int ind = 0;
 	for (int r = 0; r < height; r++) {
 		for (int c = 0; c < width; c++) {
-			debug_show.at<cv::Vec3b>(r, c)[2] = colors[ind].r * 250;
-			debug_show.at<cv::Vec3b>(r, c)[1] = colors[ind].g * 250;
-			debug_show.at<cv::Vec3b>(r, c)[0] = colors[ind].b * 250;
+			debug_show.at<cv::Vec3b>(r, c)[2] = std::min(255.0, colors[ind].r * 255);
+			debug_show.at<cv::Vec3b>(r, c)[1] = std::min(255.0, colors[ind].g * 255);
+			debug_show.at<cv::Vec3b>(r, c)[0] = std::min(255.0, colors[ind].b * 255);
 			ind++;
 		}
 	}

@@ -8,6 +8,9 @@ Vector reflect_light(Vector ray, Vector normal) {
 }
 
 Color Light::phone_shading(Intersection inter, Line ray, double diffuse, double specular, double phone) {
+	if (ray.v*inter.n > 0) {
+		inter.n = -1*inter.n;
+	}
 	Color col;
 	Vector l_v = o - inter.o;
 	if (l_v*inter.n < 0) return col;

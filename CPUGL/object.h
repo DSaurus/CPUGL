@@ -1,5 +1,6 @@
 #pragma once
 #include "math_basic.h"
+#include <vector>
 
 enum {
 	SPHERE_OBJECT,
@@ -15,7 +16,11 @@ struct Object {
 };
 
 struct MeshObject : Object {
-	Intersection get_intersection(Line ray) {}
+	std::vector<Point> verts;
+	std::vector<Vector> normals;
+	std::vector<Color> colors;
+	std::vector<std::vector<int> > triangles;
+	Intersection get_intersection(Line ray);
 };
 
 struct SphereObject : Object {

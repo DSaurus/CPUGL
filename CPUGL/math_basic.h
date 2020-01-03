@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MATH_BASIC_H
+#define MATH_BASIC_H
 
 #include <assert.h>
 #include <cmath>
@@ -82,6 +83,9 @@ struct Color {
 	Color(const Color &B) {
 		r = B.r; g = B.g; b = B.b;
 	}
+	Color operator -(Color B) {
+		return Color(r - B.r, g - B.g, b - B.b);
+	}
 	Color operator +(Color B) {
 		return Color(r + B.r, g + B.g, b + B.b);
 	}
@@ -106,3 +110,8 @@ struct Intersection {
 		ray_depth = B.ray_depth;
 	}
 };
+
+Vector get_normal(Point p1, Point p2, Point p3);
+void get_interpolation(Vector v1, Vector v2, Vector v, double &a, double &b);
+
+#endif

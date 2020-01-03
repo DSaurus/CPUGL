@@ -13,11 +13,22 @@ int main()
 	scene.camera.tri.o = Point(-1, 1, 0.5);
 	scene.camera.tri.v1 = Vector(2, 0, 0);
 	scene.camera.tri.v2 = Vector(0, -2, 0);
+
 	SphereObject sphere;
 	sphere.o = Point(0, 0, 0);
-	sphere.r = 0.8;
+	sphere.r = 0.5;
 	sphere.col = Color(0, 0, 1);
 	scene.objects.push_back(&sphere);
+
+	MeshObject mesh;
+	mesh.verts.push_back(Point(-1, -1, 0));
+	mesh.verts.push_back(Point(1, -1, 0));
+	mesh.verts.push_back(Point(0, 1, 0));
+	mesh.colors.push_back(Color(1, 0, 0));
+	mesh.colors.push_back(Color(1, 0, 0));
+	mesh.colors.push_back(Color(1, 0, 0));
+	mesh.triangles.push_back({ 0, 1, 2 });
+	scene.objects.push_back(&mesh);
 
 	Light light;
 	light.o = Point(0, 1, 1);
