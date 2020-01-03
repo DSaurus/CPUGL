@@ -5,11 +5,13 @@ enum {
 	MESH_OBJECT
 };
 
-class Object {
+struct Object {
 	int object_type;
-
+	virtual Intersection get_intersection(Line ray) {}
 };
 
-class MeshObject : Object {
+struct MeshObject : Object {
+	Intersection get_intersection(Line ray) {
 
+	}
 };
