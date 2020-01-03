@@ -6,5 +6,5 @@
 struct Camera {
 	Point o;
 	Triangle tri;
-	void getRays(std::vector<Line> &rays);
+	void getRays(std::vector<Line> &rays, int width, int height);
 };

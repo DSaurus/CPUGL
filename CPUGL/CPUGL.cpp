@@ -4,10 +4,22 @@
 #include "pch.h"
 #include <iostream>
 #include "opencv2/opencv.hpp"
+#include "scene.h"
 
 int main()
 {
-    std::cout << "Hello World!\n"; 
+	Scene scene;
+	scene.camera.o = Point(0, 0, 1);
+	scene.camera.tri.o = Point(-1, 1, 0.5);
+	scene.camera.tri.v1 = Vector(2, 0, 0);
+	scene.camera.tri.v2 = Vector(0, -2, 0);
+	SphereObject sphere;
+	sphere.o = Point(0, 0, 0);
+	sphere.r = 0.5;
+	sphere.col = Color(0, 0, 1);
+	scene.objects.push_back(&sphere);
+	scene.rend();
+	return 0;
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单

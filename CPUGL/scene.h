@@ -8,6 +8,6 @@
 struct Scene {
 	Camera camera;
 	std::vector<Light> lights;
-	std::vector<Object> objects;
+	std::vector<Object*> objects;
 	void rend();
 };
