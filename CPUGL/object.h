@@ -9,6 +9,10 @@ enum {
 
 struct Object {
 	int object_type;
+	int transparent;
+	Object() {
+		transparent = 0;
+	}
 	virtual Intersection get_intersection(Line ray) {
 		Intersection t;
 		return t;

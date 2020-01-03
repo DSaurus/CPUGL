@@ -17,18 +17,20 @@ int main()
 	SphereObject sphere;
 	sphere.o = Point(0, 0, 0);
 	sphere.r = 0.5;
-	sphere.col = Color(0, 0, 1);
+	sphere.col = Color(1, 0.5, 1);
+	sphere.transparent = 1;
 	scene.objects.push_back(&sphere);
+	std::cout << scene.objects[0]->transparent << std::endl;
 
 	MeshObject mesh;
 	mesh.verts.push_back(Point(-1, -1, 0));
 	mesh.verts.push_back(Point(1, -1, 0));
 	mesh.verts.push_back(Point(0, 1, 0));
 	mesh.verts.push_back(Point(-0.2, -0.2, 0.6));
-	mesh.colors.push_back(Color(1, 0, 0));
-	mesh.colors.push_back(Color(1, 0, 0));
-	mesh.colors.push_back(Color(1, 0, 0));
-	mesh.colors.push_back(Color(1, 0, 0));
+	mesh.colors.push_back(Color(1, 1, 0));
+	mesh.colors.push_back(Color(1, 1, 0));
+	mesh.colors.push_back(Color(1, 1, 0));
+	mesh.colors.push_back(Color(1, 1, 0));
 	mesh.triangles.push_back({ 0, 1, 3 });
 	mesh.triangles.push_back({ 0, 2, 3 });
 	mesh.triangles.push_back({ 1, 2, 3 });

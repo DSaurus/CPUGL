@@ -92,15 +92,20 @@ struct Color {
 	Color operator *(double t) {
 		return Color(r*t, g*t, b*t);
 	}
+	Color operator *(Color c) {
+		return Color(r*c.r, g*c.g, b*c.b);
+	}
 };
 
 struct Intersection {
 	Point o;
 	Color col;
 	Vector n;
+	int transparent;
 	double ray_depth;
 	Intersection() {
 		ray_depth = 1e9;
+		transparent = 0;
 		n = Vector(0, 0, 1);
 	}
 	Intersection(const Intersection &B) {
@@ -108,6 +113,7 @@ struct Intersection {
 		col = B.col;
 		n = B.n;
 		ray_depth = B.ray_depth;
+		transparent = B.transparent;
 	}
 };
 

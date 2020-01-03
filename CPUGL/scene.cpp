@@ -4,22 +4,27 @@
 #include <cstring>
 #include "opencv2/opencv.hpp"
 
+bool depth_compare(Intersection a, Intersection b) {
+	return a.ray_depth < b.ray_depth;
+}
+
 void Scene::rend() {
 	int width = 500, height = 500;
 	std::vector<Line> rays;
 	camera.getRays(rays, width, height);
 
 	//Vertex Shader
-	std::vector<Intersection> inters;
+	std::vector<std::vector<Intersection> > inters;
+	inters.resize(rays.size());
+	int rayid = 0;
 	for (auto ray : rays) {
-		Intersection ray_inter;
 		for (auto object : objects) {
 			Intersection inter = object->get_intersection(ray);
-			if (inter.ray_depth < ray_inter.ray_depth) {
-				ray_inter = inter;
-			}
+			inter.transparent = object->transparent;
+			//std::cout << inter.transparent << std::endl;
+			inters[rayid].push_back(inter);
 		}
-		inters.push_back(ray_inter);
+		rayid++;
 	}
 
 	//Fragment Shader
@@ -30,27 +35,39 @@ void Scene::rend() {
 	std::vector<Color> colors;
 	for (int i = 0; i < rays.size(); i++) {
 		Color c;
-		if (inters[i].ray_depth < 1e8) {
-			c = inters[i].col * ambient;
-			for (auto light : lights) {
-				// shadow
-				Vector l_v = inters[i].o - light.o;
-				Line ray = Line(light.o, l_v);
-				double ray_depth = sqrt(l_v*l_v), min_ray_depth = 1e9;
-				for (auto object : objects) {
-					Intersection inter = object->get_intersection(ray);
-					min_ray_depth = std::min(min_ray_depth, inter.ray_depth);
-				}
-				if (min_ray_depth + 1e-6 < ray_depth) {
+		Color transparent_c(1, 1, 1);
+		sort(inters[i].begin(), inters[i].end(), depth_compare);
+		for (auto inter : inters[i]) {
+			if (inter.ray_depth < 1e8) {
+				//std::cout << inter.transparent << std::endl;
+				if (inter.transparent == 1) {
+					transparent_c = transparent_c * inter.col;
+					//std::cout << "!" << std::endl;
 					continue;
 				}
+				c = inter.col * ambient;
+				for (auto light : lights) {
+					// shadow
+					Vector l_v = inter.o - light.o;
+					Line ray = Line(light.o, l_v);
+					double ray_depth = sqrt(l_v*l_v), min_ray_depth = 1e9;
+					for (auto object : objects) {
+						if (object->transparent == 1) continue;
+						Intersection inter = object->get_intersection(ray);
+						min_ray_depth = std::min(min_ray_depth, inter.ray_depth);
+					}
+					if (min_ray_depth + 1e-6 < ray_depth) {
+						continue;
+					}
 
-				// phone light
-				Color light_c = light.phone_shading(inters[i], rays[i], diffuse, specular, phone_s);
-				c = c + light_c;
+					// phone light
+					Color light_c = light.phone_shading(inter, rays[i], diffuse, specular, phone_s);
+					c = c + light_c;
+				}
+				break;
 			}
 		}
-		colors.push_back(c);
+		colors.push_back(c*transparent_c);
 	}
 
 	//Show
