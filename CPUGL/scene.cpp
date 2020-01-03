@@ -33,6 +33,19 @@ void Scene::rend() {
 		if (inters[i].ray_depth < 1e8) {
 			c = inters[i].col * ambient;
 			for (auto light : lights) {
+				// shadow
+				Vector l_v = inters[i].o - light.o;
+				Line ray = Line(light.o, l_v);
+				double ray_depth = sqrt(l_v*l_v), min_ray_depth = 1e9;
+				for (auto object : objects) {
+					Intersection inter = object->get_intersection(ray);
+					min_ray_depth = std::min(min_ray_depth, inter.ray_depth);
+				}
+				if (min_ray_depth + 1e-6 < ray_depth) {
+					continue;
+				}
+
+				// phone light
 				Color light_c = light.phone_shading(inters[i], rays[i], diffuse, specular, phone_s);
 				c = c + light_c;
 			}
